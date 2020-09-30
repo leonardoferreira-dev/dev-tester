@@ -12,9 +12,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(morgan("dev"));
 
+require("../src/controllers/csvController")(app);
 require("../src/controllers/fermentationController")(app);
 require("../src/controllers/sensorController")(app);
 require("../src/controllers/productsController")(app);
+
 
 app.listen(3030)
 

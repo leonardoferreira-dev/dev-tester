@@ -1,5 +1,4 @@
 const express = require("express");
-const multer = require("multer");
 const router = express.Router();
 const Product = require("../models/products");
 
@@ -26,6 +25,19 @@ router.get("/", async (req, res) => {
         const product = await Product.find()
         
         return res.send(product)
+    }
+    catch (err) {
+        return res.status(400).send({ error: err })
+    }
+});
+
+router.get("/teste", async (req, res) => {
+    try {
+       
+        const { message} = req.body
+
+        //const product = await Product.create({ title, description, price,  unit, measure, matricula })
+        return res.send({message})
     }
     catch (err) {
         return res.status(400).send({ error: err })
