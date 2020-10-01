@@ -1,55 +1,38 @@
 const express = require("express");
-const multer = require("multer");
 const router = express.Router();
-const csv = require("csv-parser")
+const Product = require("../models/products");
+
 const fs = require("fs")
+const fast = require('fast-csv');
 
 router.post("/", async (req, res) => {
-    // const products = require("./node.csv")    
+   
+    try { 
+        
+        let dados = []
+        
+        fs.createReadStream('relatorio.csv')
+            .pipe(fast.parse({ headers: false }))
+            .on('error', error => console.error(error))
+            .on('data', row => dados.push(row[0]))
+            .on('end', (rowCount) => {
+                console.log(`Parsed ${rowCount} rows`)
 
-    try {        
-        var csvData=[];
-        fs.createReadStream(req.file.path)
-        .pipe(csv())
-        .on('data', function(data){
-            try {
-                // console.log("Name is: "+data.NAME);
-                // console.log("Age is: "+data.AGE);
-                    console.log(data)
-                //perform the operation
-            }
-            catch(err) {
-                //error handler
-            }
-        })
-        .on('end',function(){
-            //some final operation
-        });  
+                const toObject = dados.map((item) => {                    
+                    const [title, description, price, unit, measure, matricula ] = item.split(';');
+                    return {title, description, price, unit, measure, matricula }
+                });
 
-        return res.status(200).send({csvData})
- 
+                //const product = Product.create(toObject)
+                return console.log(toObject)
+                return res.status(200).json(product)
+            }) 
     }
+    
     catch (err) {
         console.log(err)
         return res.status(400).send({ error: err })
     }
 })
-
-// router.post("/", async (req, res) => {
-
-//     try {
-        
-//         const { message } = req.body       
-
-//         return res.status(200).send({message})
- 
-//     }
-//     catch (err) {
-//         console.log(err)
-//         return res.status(400).send({ error: err })
-//     }
-// })
-
-
 
 module.exports = app => app.use("/csv", router);
