@@ -10,6 +10,10 @@ const dbProducts = new mongoose.Schema({
         type: String,
         required: false,
     },
+    brand: {
+        type: String,
+        required: false,
+    },
     description: {
         type: String,
         required: false,
