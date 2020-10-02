@@ -2,17 +2,21 @@
 const mongoose = require("../database");
 
 const dbProducts = new mongoose.Schema({
+    cf: {
+        type: String,
+        required: false,
+    },
     title: {
         type: String,
         required: false,
     },
     description: {
         type: String,
-        required: true,
+        required: false,
     },    
     price: {
-        type: String,
-        required: true,
+        type: Number,
+        required: false,
     },
     unit: {
         type: String,
@@ -27,8 +31,13 @@ const dbProducts = new mongoose.Schema({
     matricula: {
         type: Number,
         required: false,
-    },   
-},{ timestamps: true })
+        unique: false,
+    },
+    quantity: {
+        type: Number,
+        required: false,
+    },
+},{ timestamps: false })
 
 const Products = mongoose.model("dbProducts", dbProducts)
 
